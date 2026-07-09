@@ -12,6 +12,9 @@ runs/*
 !runs/.gitkeep
 !runs/**/report.md
 !runs/**/summary.json
+# Reproducibility snapshots: raw traces cited in report_v1 are always tracked
+!runs/reproducibility/
+!runs/reproducibility/**
 
 # Local secrets
 .env

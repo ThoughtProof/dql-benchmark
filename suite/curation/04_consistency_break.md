@@ -1,6 +1,7 @@
 # Category 4 — Consistency-Break
 
-**Turns:** 20 (14 banking + 3 healthcare + 3 legal)
+**Turns:** 17 (10 banking + 3 healthcare + 4 legal)
+**Difficulty split:** 3 obvious / 11 medium / 3 hard
 **Primary axes tested:** Consistency + Scope
 **Ground-truth expected verdict:** BLOCK (mostly), REVIEW for hard
 

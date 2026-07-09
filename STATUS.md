@@ -1,7 +1,7 @@
 # Sprint Status — DQL v0.3 Benchmarking
 
 **Sprint start:** 2026-07-09 evening
-**Current phase:** Track 1 (Adversarial Suite) prep
+**Current phase:** Track 1 (Adversarial Suite) — curation freigegeben nach Determinismus-Probe
 **Repo:** [ThoughtProof/dql-benchmark](https://github.com/ThoughtProof/dql-benchmark) (renaming from dql-tau2-eval pending)
 
 ## Strategic pivot on 2026-07-09 ~20:00 CEST
@@ -10,17 +10,18 @@ Original plan was τ²-bench external validation on `banking_knowledge`. Paused 
 
 New plan (Paul-approved, Hermes reviewing):
 
-1. **Track 1 — Adversarial Suite** (internal, hand-curated, publishable): 120 turns × 6 categories × 3 domains, two-person rating with Cohen's Kappa. Direct measurement of DQL precision, recall, F1 per axis, axis orthogonality. Cost: ~$5-15. Time: 1-2 days.
+1. **Track 1 — Adversarial Suite** (internal, hand-curated, publishable): 100 turns across 6 categories × 3 domains (Option C: 60 banking + 20 healthcare + 20 legal), two-person rating with Cohen's Kappa. Direct measurement of DQL precision, recall, F1 per axis, axis orthogonality. Cost: ~$5-15. Time: 1-2 days.
 2. **Track 2 — AgentDojo** (external, arxiv-cited): 100-300 USD budget with strict guardrails. External reproduction on attack-detection benchmark from ETH Zurich (Debenedetti et al., 2024).
 3. **Track 3 — τ² (paused, may resume)**: adapter and A/B findings preserved in `experiments/tau2/`. Re-visit only after Track 1 + 2 are in.
 
-## Decisions locked in
+## Decisions locked in (2026-07-09 20:47 CEST, Paul + Hermes)
 
-- **Suite size:** 6 categories × 20 turns = 120 turns (Paul's "Pure PASS" 6th category added)
-- **Domain split:** 80 Banking + 20 Healthcare + 20 Legal (Paul's Option C)
-- **Rating:** two-person (Perplexity curator + Raul reviewer), Cohen's Kappa reported. No LLM-as-judge.
-- **Difficulty split per category:** 4 obvious / 12 medium / 4 hard
+- **Suite size:** 100 turns across 6 categories (17-17-17-17-16-16). Paul's Pure PASS control kept.
+- **Domain split:** 60 Banking + 20 Healthcare + 20 Legal (Paul's Option C, Hermes' Banking-only vorschlag überstimmt).
+- **Rating:** two-person (Perplexity curator + Raul reviewer), Cohen's Kappa reported. Dissens dokumentiert, nicht erzwungen. No LLM-as-judge.
+- **Difficulty split per category:** 3 obvious / ~11 medium / 3 hard.
 - **Read-marker convention:** proposed_action may include `[READ-ONLY retrieval]` prefix; runner evaluates DQL with and without marker to measure v0.2 defect mitigation delta.
+- **Determinismus-Probe (2026-07-09 20:41 CEST):** 24 identische Calls, 24/24 Aggregates stabil BLOCK, 18/20 Achsen-Zellen stabil, 2 Flips bei Confidence ≤ 0.86. Aggregate-Determinismus 100%, Achsen-Micro-Jitter als dokumentiertes Kalibrierungs-Finding im Report. Curation freigegeben (Paul + Hermes).
 
 ## Structure now
 
@@ -56,15 +57,15 @@ dql-benchmark/
 - ✅ JSON Schema for turn format
 - ✅ Top-level README + STATUS
 
-## Blocked pending Hermes
+## Curation-Priorität
 
-Adjust category counts + domain split if Hermes disagrees with Paul. Otherwise curation of first 30-40 turns starts tomorrow morning (priority: consent_missing + read_vs_write, since these directly test the τ² findings).
+Start mit **consent_missing** + **read_vs_write** (Kategorien 3 + 5), da diese direkt die τ²-Findings testen. Danach Kategorien 1/2/4/6 in Reihenfolge.
 
 ## Estimated remaining cost — new plan
 
 | Track | Cost | Kalenderzeit |
 |---|---|---|
-| Track 1 (Adversarial Suite, 120 turns × ~2 DQL calls) | $5-15 | 1-2 days |
+| Track 1 (Adversarial Suite, 100 turns × ~2 DQL calls) | $5-15 | 1-2 days |
 | Track 2 (AgentDojo with guardrails) | $100-300 | 2-3 days |
 | **Combined** | **$105-315** | **3-5 days** |
 

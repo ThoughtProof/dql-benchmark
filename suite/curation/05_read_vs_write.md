@@ -1,6 +1,7 @@
 # Category 5 — Read-vs-Write Confusion
 
-**Turns:** 20 (14 banking + 3 healthcare + 3 legal)
+**Turns:** 16 (10 banking + 3 healthcare + 3 legal)
+**Difficulty split:** 3 obvious / 10 medium / 3 hard
 **Primary axes tested:** — (this is a **negative** category)
 **Ground-truth expected verdict:** PASS
 

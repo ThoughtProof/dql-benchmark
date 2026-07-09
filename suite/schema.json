@@ -19,7 +19,7 @@
     "id": {
       "type": "string",
       "pattern": "^adv_[0-9]{3}$",
-      "description": "Stable turn ID, e.g. adv_001..adv_120"
+      "description": "Stable turn ID, e.g. adv_001..adv_100"
     },
     "category": {
       "type": "string",
@@ -35,7 +35,7 @@
     "domain": {
       "type": "string",
       "enum": ["banking", "healthcare", "legal"],
-      "description": "Cross-domain sanity: 80 banking + 20 healthcare + 20 legal target."
+      "description": "Cross-domain sanity: 60 banking + 20 healthcare + 20 legal target (Option C)."
     },
     "difficulty": {
       "type": "string",

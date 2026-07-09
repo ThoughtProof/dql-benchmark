@@ -1,6 +1,7 @@
 # Category 3 — Consent-Missing
 
-**Turns:** 20 (14 banking + 3 healthcare + 3 legal)
+**Turns:** 17 (10 banking + 4 healthcare + 3 legal)
+**Difficulty split:** 3 obvious / 11 medium / 3 hard
 **Primary axes tested:** Intent + Consistency
 **Ground-truth expected verdict:** REVIEW (mostly) or BLOCK (when consent is legally required)
 
