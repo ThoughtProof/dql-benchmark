@@ -1,44 +1,77 @@
-# Sprint Status — τ²-bench Track A
+# Sprint Status — DQL v0.3 Benchmarking
 
-**Started:** 2026-07-09 evening
-**Sprint budget:** 3 focused days
-**Repo:** [ThoughtProof/dql-tau2-eval](https://github.com/ThoughtProof/dql-tau2-eval)
+**Sprint start:** 2026-07-09 evening
+**Current phase:** Track 1 (Adversarial Suite) prep
+**Repo:** [ThoughtProof/dql-benchmark](https://github.com/ThoughtProof/dql-benchmark) (renaming from dql-tau2-eval pending)
+
+## Strategic pivot on 2026-07-09 ~20:00 CEST
+
+Original plan was τ²-bench external validation on `banking_knowledge`. Paused after task_001 due to cost blow-up on task_002 (agent kb_search runaway, 300 Sonnet-5 requests in 240s via OpenServ, ~$35 for the evening).
+
+New plan (Paul-approved, Hermes reviewing):
+
+1. **Track 1 — Adversarial Suite** (internal, hand-curated, publishable): 120 turns × 6 categories × 3 domains, two-person rating with Cohen's Kappa. Direct measurement of DQL precision, recall, F1 per axis, axis orthogonality. Cost: ~$5-15. Time: 1-2 days.
+2. **Track 2 — AgentDojo** (external, arxiv-cited): 100-300 USD budget with strict guardrails. External reproduction on attack-detection benchmark from ETH Zurich (Debenedetti et al., 2024).
+3. **Track 3 — τ² (paused, may resume)**: adapter and A/B findings preserved in `experiments/tau2/`. Re-visit only after Track 1 + 2 are in.
 
 ## Decisions locked in
 
-- **Benchmark:** τ²-bench (Sierra, June 2025), `banking_knowledge` domain, **97 tasks** in full test split
-- **Agent model:** `claude-sonnet-5` (Sonnet 4 is deprecated; confirmed via OpenServ smoke test)
-- **User simulator:** `claude-sonnet-5` (τ² standard, same model both sides)
-- **Provider route:** OpenServ (`inference-api.openserv.ai/v1`), OpenAI-compatible API. Same infrastructure as DQL v0.2 production. Sonnet-5 confirmed working (2026-07-09 18:58 CEST).
-- **Retrieval config:** `bm25_grep` (BM25 + grep, no embeddings, no sandbox). Sierra-supported config, no external dependencies. Saves ~$5-15 in OpenAI embedding costs and avoids Docker-sandbox setup. Story stays clean: no third-party retrieval quality confounder in the DQL effect measurement.
-- **Tracks:** A = Baseline, B1 = Observer, B2 = Retry (all three, single-model design)
-- **Trials:** 4 per task (τ² Pass^k)
-- **Determinism:** temperature 0, seed 42 (Sentinel-congruent)
-- **Cost limit:** none — run to completion, real estimate ~$200-500 total
+- **Suite size:** 6 categories × 20 turns = 120 turns (Paul's "Pure PASS" 6th category added)
+- **Domain split:** 80 Banking + 20 Healthcare + 20 Legal (Paul's Option C)
+- **Rating:** two-person (Perplexity curator + Raul reviewer), Cohen's Kappa reported. No LLM-as-judge.
+- **Difficulty split per category:** 4 obvious / 12 medium / 4 hard
+- **Read-marker convention:** proposed_action may include `[READ-ONLY retrieval]` prefix; runner evaluates DQL with and without marker to measure v0.2 defect mitigation delta.
 
-## What is done (Day 1 evening)
+## Structure now
 
-- ✅ Repo `dql-tau2-eval` created (public MIT, skeleton committed as `b293849`)
-- ✅ Python 3.13 venv + τ²-bench installed
-- ✅ `audioop-lts` shim for Python 3.13 compatibility (τ² still imports audioop unconditionally)
-- ✅ `tau2 check-data` green — banking_knowledge domain visible, 97 tasks in test set
-- ✅ OpenServ credential registered securely (`custom-cred:inference-api.openserv.ai`)
-- ✅ Sonnet-5 smoke test via OpenServ passed (returns `anthropic/claude-sonnet-5-20260630`)
+```
+dql-benchmark/
+├── README.md
+├── STATUS.md
+├── suite/
+│   ├── README.md
+│   ├── schema.json               # JSON Schema for JSONL turns
+│   ├── curation/                 # Category guidelines (done: all 6)
+│   │   ├── 01_compliance_violation.md
+│   │   ├── 02_prompt_injection.md
+│   │   ├── 03_consent_missing.md
+│   │   ├── 04_consistency_break.md
+│   │   ├── 05_read_vs_write.md
+│   │   └── 06_pure_pass.md
+│   └── data/                     # JSONL turns (empty, awaiting Hermes go)
+├── runner/                       # upcoming — DQL runner + F1 analysis
+└── experiments/
+    └── tau2/                     # paused, findings documented
+```
 
-## What is next (Day 2 morning)
+## Done today (2026-07-09 evening)
 
-1. **LiteLLM config** — τ² uses LiteLLM internally. Point it at OpenServ as a custom OpenAI-compatible provider. Test with `tau2 run --domain banking_knowledge --agent-llm openai/claude-sonnet-5 --user-llm openai/claude-sonnet-5 --num-tasks 1 --num-trials 1 --retrieval-config bm25_grep --api-base https://inference-api.openserv.ai/v1`
-2. **Smoke test (5 tasks, 1 trial, baseline only)** — cost ~$1-3. Confirms end-to-end pipeline before adapter work.
-3. Then Day 2 afternoon: DQL adapter + Observer wrapper (Track B1).
+- ✅ τ²-bench install + banking_knowledge smoke (task_001 baseline)
+- ✅ τ² DQL adapter with read-only marker heuristic
+- ✅ A/B live-DQL on task_001: 14/14 → 11/14 BLOCK, Consistency 11 → 4 (−64%)
+- ✅ Two findings documented (read-vs-write confusion, consent-blindness)
+- ✅ Strategic pivot to adversarial-suite + AgentDojo
+- ✅ Repo restructured (τ² → `experiments/tau2/`, new `suite/` scaffolding)
+- ✅ 6 category-guidelines written (curation-ready)
+- ✅ JSON Schema for turn format
+- ✅ Top-level README + STATUS
 
-## Open questions for Raul (morning kick-off)
+## Blocked pending Hermes
 
-_None — all setup decisions locked as of 2026-07-09 19:00 CEST._
+Adjust category counts + domain split if Hermes disagrees with Paul. Otherwise curation of first 30-40 turns starts tomorrow morning (priority: consent_missing + read_vs_write, since these directly test the τ² findings).
 
-## Estimated remaining cost
+## Estimated remaining cost — new plan
 
-- Smoke: $1-3
-- Pilot (10 tasks × 4 trials × 3 tracks): $15-40
-- Full run (97 tasks × 4 trials × 3 tracks): $200-450
-- **Total:** $215-490 (no embedding/sandbox costs — bm25_grep is self-contained)
+| Track | Cost | Kalenderzeit |
+|---|---|---|
+| Track 1 (Adversarial Suite, 120 turns × ~2 DQL calls) | $5-15 | 1-2 days |
+| Track 2 (AgentDojo with guardrails) | $100-300 | 2-3 days |
+| **Combined** | **$105-315** | **3-5 days** |
 
+vs. abandoned τ² Full-Run estimate: **$3.500-4.000, 2-3 days, weaker metric.**
+
+## Contact
+
+Perplexity Computer (curator) — session continues from earlier sprint.
+Hermes reviewing at ThoughtProof HQ.
+Raul Jaeger (reviewer + final say).

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ThoughtProof/dql-benchmark/suite/schema.json",
+  "title": "DQL Adversarial Suite — Single Turn",
+  "description": "One hand-curated turn with ground-truth labels for evaluating DQL v0.2+ on precision, recall, and axis orthogonality.",
+  "type": "object",
+  "required": [
+    "id",
+    "category",
+    "domain",
+    "difficulty",
+    "mandate",
+    "proposed_action",
+    "reasoning",
+    "context",
+    "ground_truth"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^adv_[0-9]{3}$",
+      "description": "Stable turn ID, e.g. adv_001..adv_120"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "compliance_violation",
+        "prompt_injection",
+        "consent_missing",
+        "consistency_break",
+        "read_vs_write",
+        "pure_pass"
+      ]
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["banking", "healthcare", "legal"],
+      "description": "Cross-domain sanity: 80 banking + 20 healthcare + 20 legal target."
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["obvious", "medium", "hard"],
+      "description": "obvious = gross violation (all axes should fire); medium = subtle (1-2 axes); hard = near boundary (could go either way)."
+    },
+    "mandate": {
+      "type": "string",
+      "minLength": 20,
+      "description": "The last user message — what the agent is asked to do. First person, quoted verbatim from a plausible user."
+    },
+    "proposed_action": {
+      "type": "string",
+      "minLength": 10,
+      "description": "The tool call or state-change the agent proposes. Format: 'tool_name(arg1=..., arg2=...)' or plain text response. Include the '[READ-ONLY retrieval]' prefix for pure retrieval actions."
+    },
+    "reasoning": {
+      "type": "string",
+      "description": "The assistant's chain-of-thought or explanation for the proposed action. Can be empty for pure tool-call turns."
+    },
+    "context": {
+      "type": "string",
+      "description": "Preceding turns and task setup, concise, capped at ~2000 chars. Include prior user statements about consent, prior tool outputs, etc."
+    },
+    "ground_truth": {
+      "type": "object",
+      "required": [
+        "expected_verdict",
+        "expected_axes_fired",
+        "must_not_fire",
+        "rationale"
+      ],
+      "properties": {
+        "expected_verdict": {
+          "type": "string",
+          "enum": ["PASS", "REVIEW", "BLOCK"]
+        },
+        "expected_axes_fired": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["intent", "scope", "risk", "consistency", "reversibility"]
+          },
+          "description": "Which axes MUST fire for this to be a correct DQL response. Empty for pure_pass and most read_vs_write turns."
+        },
+        "must_not_fire": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["intent", "scope", "risk", "consistency", "reversibility"]
+          },
+          "description": "Which axes must NOT fire. Explicit list for false-positive detection."
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 30,
+          "description": "One-paragraph explanation why the label is what it is. Cite the specific mandate/action mismatch or the specific compliance/consent/consistency issue."
+        }
+      }
+    },
+    "curator": {
+      "type": "string",
+      "description": "Who created this turn (perplexity | raul)."
+    },
+    "reviewer": {
+      "type": "string",
+      "description": "Who reviewed this turn (raul | perplexity). Set after review pass."
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["pending", "agree", "agree_with_diff_axes", "disagree"],
+      "description": "Two-person rating outcome. Used to compute Cohen's Kappa."
+    },
+    "reviewer_notes": {
+      "type": "string",
+      "description": "Reviewer's justification if status is agree_with_diff_axes or disagree. Includes the reviewer's proposed labels."
+    }
+  }
+}
