@@ -11,6 +11,9 @@ dist/
 runs/*
 !runs/.gitkeep
 !runs/**/report.md
+!runs/report_*.md
+!runs/results_*.jsonl
+!runs/errors_*.jsonl
 !runs/**/summary.json
 # Reproducibility snapshots: raw traces cited in report_v1 are always tracked
 !runs/reproducibility/
