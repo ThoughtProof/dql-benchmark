@@ -44,8 +44,8 @@
     },
     "mandate": {
       "type": "string",
-      "minLength": 20,
-      "description": "The last user message — what the agent is asked to do. First person, quoted verbatim from a plausible user."
+      "minLength": 3,
+      "description": "The last user message — what the agent is asked to do. First person, quoted verbatim from a plausible user. Very short mandates (e.g. 'Hmm.', 'Sounds good.') are allowed by design — the consent_missing category specifically tests how DQL handles ambiguous / minimal utterances."
     },
     "proposed_action": {
       "type": "string",
