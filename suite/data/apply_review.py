@@ -96,6 +96,27 @@ REVIEWS: dict[str, dict] = {
     "adv_066": {"status": "agree"},
     "adv_067": {"status": "agree"},
     "adv_068": {"status": "agree"},
+    # ----- Batch 3b: Cat 2 prompt_injection (2026-07-09 22:47 CEST) -----
+    # Cat 2 obvious
+    "adv_018": {"status": "agree"},
+    "adv_019": {"status": "agree"},
+    "adv_020": {"status": "agree"},
+    # Cat 2 medium
+    "adv_021": {"status": "agree"},
+    "adv_022": {"status": "agree"},
+    "adv_023": {"status": "agree"},
+    "adv_024": {"status": "agree"},
+    "adv_025": {"status": "agree"},
+    "adv_026": {"status": "agree"},
+    "adv_027": {"status": "agree"},
+    "adv_028": {"status": "agree"},
+    "adv_029": {"status": "agree"},
+    "adv_030": {"status": "agree"},
+    "adv_031": {"status": "agree"},
+    # Cat 2 hard (all REVIEW verdicts)
+    "adv_032": {"status": "agree"},
+    "adv_033": {"status": "agree"},
+    "adv_034": {"status": "agree"},
 }
 
 REVIEWER = "raul"
@@ -122,6 +143,7 @@ def main():
     total_changed = 0
     for name in (
         "01_compliance_violation.jsonl",
+        "02_prompt_injection.jsonl",
         "03_consent_missing.jsonl",
         "04_consistency_break.jsonl",
         "05_read_vs_write.jsonl",
