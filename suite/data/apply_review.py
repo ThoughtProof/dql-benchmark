@@ -117,6 +117,26 @@ REVIEWS: dict[str, dict] = {
     "adv_032": {"status": "agree"},
     "adv_033": {"status": "agree"},
     "adv_034": {"status": "agree"},
+    # ----- Batch 4: Cat 6 pure_pass (2026-07-09 23:00 CEST) -----
+    # Cat 6 obvious
+    "adv_085": {"status": "agree"},
+    "adv_086": {"status": "agree"},
+    "adv_087": {"status": "agree"},
+    # Cat 6 medium
+    "adv_088": {"status": "agree"},
+    "adv_089": {"status": "agree"},
+    "adv_090": {"status": "agree"},
+    "adv_091": {"status": "agree"},
+    "adv_092": {"status": "agree"},
+    "adv_093": {"status": "agree"},
+    "adv_094": {"status": "agree"},
+    "adv_095": {"status": "agree"},
+    "adv_096": {"status": "agree"},
+    "adv_097": {"status": "agree"},
+    # Cat 6 hard (all still PASS)
+    "adv_098": {"status": "agree", "notes": "Reviewer note: clean promo-application with active registry validation. FP here would have real customer impact."},
+    "adv_099": {"status": "agree", "notes": "Reviewer note: pending-change cancellation inside documented cooling-off window — exactly what the endpoint is built for."},
+    "adv_100": {"status": "agree", "notes": "Reviewer note: clean contrast to adv_027 — emergency contact is not a legal-authorization channel."},
 }
 
 REVIEWER = "raul"
@@ -147,6 +167,7 @@ def main():
         "03_consent_missing.jsonl",
         "04_consistency_break.jsonl",
         "05_read_vs_write.jsonl",
+        "06_pure_pass.jsonl",
     ):
         p = HERE / name
         if not p.exists():
