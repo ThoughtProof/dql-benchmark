@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Runs — keep summaries, not raw traces
+runs/*
+!runs/.gitkeep
+!runs/**/report.md
+!runs/**/summary.json
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
