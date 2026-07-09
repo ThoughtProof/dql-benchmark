@@ -20,9 +20,11 @@ We take τ²-bench (Sierra's tool-agent-user benchmark, banking domain) and run 
 
 ## Method
 
-- **Benchmark:** τ²-bench, banking domain, full test split
-- **Agent model:** `claude-sonnet-4` (single model — this is a DQL effect study, not a model comparison)
-- **User simulator:** `claude-sonnet-4` (τ² default)
+- **Benchmark:** τ²-bench, `banking_knowledge` domain, full test split (97 tasks)
+- **Agent model:** `claude-sonnet-5` (single model — this is a DQL effect study, not a model comparison)
+- **User simulator:** `claude-sonnet-5` (τ² default, same model both sides)
+- **Provider route:** OpenServ (`inference-api.openserv.ai/v1`) — same infrastructure as DQL v0.2 production
+- **Retrieval config:** `bm25_grep` (self-contained, no embeddings or sandbox; keeps DQL effect measurement clean)
 - **DQL endpoint:** `https://dql.thoughtproof.ai/dql/verify` (production DQL v0.2, cascade `pot-cli`)
 - **Trials:** 4 per task (τ² Pass^k metric)
 - **Determinism:** temperature 0, seed 42 (Sentinel-congruent)

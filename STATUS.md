@@ -10,7 +10,7 @@
 - **Agent model:** `claude-sonnet-5` (Sonnet 4 is deprecated; confirmed via OpenServ smoke test)
 - **User simulator:** `claude-sonnet-5` (τ² standard, same model both sides)
 - **Provider route:** OpenServ (`inference-api.openserv.ai/v1`), OpenAI-compatible API. Same infrastructure as DQL v0.2 production. Sonnet-5 confirmed working (2026-07-09 18:58 CEST).
-- **Retrieval config:** `alltools` (official default — BM25 + dense + shell). Requires OPENAI_API_KEY for embeddings + Docker/sandbox for shell retrieval.
+- **Retrieval config:** `bm25_grep` (BM25 + grep, no embeddings, no sandbox). Sierra-supported config, no external dependencies. Saves ~$5-15 in OpenAI embedding costs and avoids Docker-sandbox setup. Story stays clean: no third-party retrieval quality confounder in the DQL effect measurement.
 - **Tracks:** A = Baseline, B1 = Observer, B2 = Retry (all three, single-model design)
 - **Trials:** 4 per task (τ² Pass^k)
 - **Determinism:** temperature 0, seed 42 (Sentinel-congruent)
@@ -27,22 +27,18 @@
 
 ## What is next (Day 2 morning)
 
-1. **LiteLLM config** — τ² uses LiteLLM internally. Point it at OpenServ as a custom OpenAI-compatible provider. Test with `tau2 run --domain banking_knowledge --agent-llm openai/claude-sonnet-5 --user-llm openai/claude-sonnet-5 --num-tasks 1 --num-trials 1 --api-base https://inference-api.openserv.ai/v1`
-2. **OpenAI-key credential** — for BM25+dense retrieval embeddings in `alltools`. Ask Raul.
-3. **Docker sandbox** — banking_knowledge with `alltools` needs a container for shell-based retrieval. Options: run local Docker in sandbox, or fallback to `bm25_grep` (BM25 + grep, no dense, no shell) for a lighter setup that still stays closer to alltools than pure `no_knowledge`.
-4. **Smoke test (5 tasks, 1 trial, baseline only)** — cost ~$1-3. Confirms end-to-end pipeline before adapter work.
-5. Then Day 2 afternoon: DQL adapter + Observer wrapper (Track B1).
+1. **LiteLLM config** — τ² uses LiteLLM internally. Point it at OpenServ as a custom OpenAI-compatible provider. Test with `tau2 run --domain banking_knowledge --agent-llm openai/claude-sonnet-5 --user-llm openai/claude-sonnet-5 --num-tasks 1 --num-trials 1 --retrieval-config bm25_grep --api-base https://inference-api.openserv.ai/v1`
+2. **Smoke test (5 tasks, 1 trial, baseline only)** — cost ~$1-3. Confirms end-to-end pipeline before adapter work.
+3. Then Day 2 afternoon: DQL adapter + Observer wrapper (Track B1).
 
 ## Open questions for Raul (morning kick-off)
 
-- Do we have an OpenAI key handy for embeddings? Or take the `bm25_grep` shortcut?
-- Docker in the sandbox — the runtime here can host containers, but the τ² sandbox-runtime dependency is heavy. If it's a blocker, fallback to `bm25_grep` is fine and the Sierra leaderboard has entries for that config too.
+_None — all setup decisions locked as of 2026-07-09 19:00 CEST._
 
 ## Estimated remaining cost
 
 - Smoke: $1-3
 - Pilot (10 tasks × 4 trials × 3 tracks): $15-40
 - Full run (97 tasks × 4 trials × 3 tracks): $200-450
-- Embeddings (OpenAI, one-time): $5-15
-- **Total:** $220-500
+- **Total:** $215-490 (no embedding/sandbox costs — bm25_grep is self-contained)
 
