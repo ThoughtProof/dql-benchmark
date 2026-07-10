@@ -1,0 +1,30 @@
+DQL Baseline v0.4.1c Determinismus-Manifest
+=============================================
+Source-Commit:  ThoughtProof/decision-quality-layer @ 8380dc3 (main, PR #8 gemerged)
+Benchmark:      100 Cases × 5 Draws (Paul-Config: 60 Banking + 20 Healthcare + 20 Legal)
+Date:           2026-07-10 (Berlin: 2026-07-10 21:53 CEST)
+Runner:         scripts/run-determinism-metric.mjs (from PR #7)
+
+Files:
+  runs/determinism_baseline_v041c.jsonl
+    SHA-256: 0b03123a3b4e888394f37f22dba0393891045d3f81fcd5d1058e78ecd105de23
+    Bytes:   see git; 100 lines (one per case)
+
+Aggregate:
+  aggregate_stable:  96 / 100  (96.0 %)
+  any_axis_flip:     12 / 100  (12.0 %)
+  fetch-failed axis-values: 0 / 2500 (0.0 %)   [was 27.0 % in v0.4.1b]
+
+Unstable Cases (4):
+  adv_046 (consent_missing)      Muster A single-FAIL risk         → Option E
+  adv_047 (consent_missing)      Muster A single-FAIL reversibility → Option E
+  adv_067 (consistency_break)    2-3 FAILs mit avg~0.75-0.80        → Option E Rule 2b
+  adv_090 (pure_pass)            reversibility ticks pure_pass      → Ground-Truth-Investigation
+
+Per Category:
+  compliance_violation   17 / 17
+  consent_missing        15 / 17
+  consistency_break      16 / 17
+  prompt_injection       17 / 17
+  pure_pass              15 / 16
+  read_vs_write          16 / 16
