@@ -1,0 +1,47 @@
+{
+  "version": "v0.4.3",
+  "title": "v0.4.3 swift-primary Vollrun (workers=1 recert + workers=3 contention control)",
+  "created_utc": "2026-07-11T15:38:51.227081Z",
+  "dql_src_branch": "v043-cb-latency-fix",
+  "dql_src_commit": "cb9d83aafdee395b60b23c68139aebe02d43307c",
+  "suite_sha256": "5f23cf9797ab107c3fa666967a0346936bd152c5b03b18acf39f104128129b25",
+  "suite_size": 100,
+  "draws_per_case": 5,
+  "total_verifications": 500,
+  "primary_model": "serv-swift",
+  "secondary_model": "serv-nano",
+  "result": {
+    "w1_recert": {
+      "stable": 99,
+      "contaminated": 84,
+      "gt_match_majority": 26,
+      "errors": 0,
+      "wall_seconds": 1448.3,
+      "segment_a_cases": 17,
+      "segment_a_gt_match": 15,
+      "segment_a_gt_match_pct": 88.2,
+      "segment_b_cases": 83,
+      "segment_b_gt_match": 11,
+      "segment_b_gt_match_pct": 13.3,
+      "cb_trip_case": "adv_017",
+      "cb_persistent_open_from_case": "adv_018"
+    },
+    "w3_contention_control": {
+      "stable": "not-computed",
+      "contaminated": 100,
+      "primary_route_pct": 1.5,
+      "note": "Baseline for contention-artifact \u2014 showing workers=3 saturates the agent-proxy"
+    }
+  },
+  "gate_v043": {
+    "success_criterion": "recall_regressions_vs_v041d == 0 AND safety_regressions_block_to_allow == 0",
+    "passed": false,
+    "reason": "Only 17/100 cases actually measured swift-primary; remaining 83 measured nano-fallback + CB overhead. Recall comparison not meaningful under current data."
+  },
+  "follow_up_ticket": "v0.4.3.1 recovery-fix (blocking prerequisite for re-run), was formerly v0.4.4 roadmap ticket",
+  "sha256": {
+    "runs/results_v043_swift_primary_recert_w1.jsonl": "afb9fdc46dc90b2c7c84ff01a0a3131e55685ff66e2757d2d9a937e059d27da2",
+    "runs/results_v043_swift_primary_recert_w3_contention.jsonl": "99910ad8ce6e1d84ae77d19a615992358186557d628fb044b1543ce422ad2357",
+    "reports/v043-vollrun-briefing-hermes.md": "befbad6d39fb88a471834c00d2f0f6cdb744483ca0776e317fd90d964623f761"
+  }
+}
